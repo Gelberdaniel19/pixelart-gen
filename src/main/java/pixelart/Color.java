@@ -1,3 +1,5 @@
+package pixelart;
+
 public class Color {
     public int R;
     public int G;

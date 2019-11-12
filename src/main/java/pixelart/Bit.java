@@ -1,3 +1,5 @@
+package pixelart;
+
 public class Bit {
     public int x;
     public int y;

@@ -1,3 +1,5 @@
+package pixelart;
+
 import java.util.Map;
 
 public class Random {

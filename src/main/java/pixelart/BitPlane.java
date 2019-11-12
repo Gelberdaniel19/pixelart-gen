@@ -1,6 +1,9 @@
-import geometry.Line;
-import geometry.Point;
-import geometry.Triangle;
+package pixelart;
+
+import pixelart.geometry.Line;
+import pixelart.geometry.Point;
+import pixelart.geometry.Quad;
+import pixelart.geometry.Triangle;
 
 import java.util.ArrayList;
 
@@ -61,6 +64,31 @@ public class BitPlane {
     }
     //endregion
 
+    /**
+     * Recursively fill the area starting with this bit
+     * @param bit   bit to start filling with
+     */
+    public void fill(Bit bit) {
+        // Base case
+        if (get(bit).on) {
+            return;
+        }
+
+        // Action
+        set(bit, true);
+
+        // Recursive case
+        System.out.println("pixelart.Bit: " + bit.x + ", " + bit.y);
+        if (!get(bit.up()).on)      fill(bit.up());
+        if (!get(bit.down()).on)    fill(bit.down());
+        if (!get(bit.left()).on)    fill(bit.left());
+        if (!get(bit.right()).on)   fill(bit.right());
+    }
+
+    public void fill(int x, int y) {
+        fill(get(x, y));
+    }
+
     public ArrayList<Bit> drawLine(Line l) {
         ArrayList<Bit> out = new ArrayList<Bit>();
 
@@ -79,6 +107,16 @@ public class BitPlane {
         ArrayList<Bit> line3 = drawLine(new Line(t.getP3(), t.getP1()));
 
         Point mid = t.getMiddle();
-        set((int)mid.getX(), (int)mid.getY(), true);
+        fill((int)mid.getX(), (int)mid.getY());
+    }
+
+    public void drawQuad(Quad q) {
+        ArrayList<Bit> line1 = drawLine(new Line(q.getP1(), q.getP2()));
+        ArrayList<Bit> line2 = drawLine(new Line(q.getP2(), q.getP3()));
+        ArrayList<Bit> line3 = drawLine(new Line(q.getP3(), q.getP4()));
+        ArrayList<Bit> line4 = drawLine(new Line(q.getP4(), q.getP1()));
+
+        Point mid = q.getMiddle();
+        fill((int)mid.getX(), (int)mid.getY());
     }
 }

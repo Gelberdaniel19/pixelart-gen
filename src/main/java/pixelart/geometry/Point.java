@@ -1,4 +1,4 @@
-package geometry;
+package pixelart.geometry;
 
 public class Point {
     private double x;

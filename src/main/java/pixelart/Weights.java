@@ -1,3 +1,5 @@
+package pixelart;
+
 import java.util.HashMap;
 
 public class Weights<T> {
