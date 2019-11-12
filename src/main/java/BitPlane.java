@@ -22,8 +22,6 @@ public class BitPlane {
     }
 
     public Bit set(int x, int y, boolean on) {
-        System.out.println(x + ", " + y);
-
         int index = x * width + y;
         if (index < 0 || index > plane.size()) {
             return null;
