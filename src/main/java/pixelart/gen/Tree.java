@@ -3,6 +3,8 @@ package pixelart.gen;
 import pixelart.Random;
 import pixelart.geometry.Point;
 import pixelart.geometry.Quad;
+import pixelart.geometry.Rect;
+
 import java.util.ArrayList;
 
 public class Tree {
@@ -12,10 +14,7 @@ public class Tree {
         trunk = new ArrayList<Quad>();
     }
 
-    public Quad generate() {
-        int width = 100;
-        int height = 100;
-
+    public void generate() {
         double baseWidth = 15;
         double widthVar = 3;
         double angleVar = 0.3;
@@ -34,6 +33,43 @@ public class Tree {
         double deltaY2 = deltaPos2 * Math.sin(angle);
         Point p3 = new Point(p2.getX() + deltaX2, p2.getY() + deltaY2);
 
-        return new Quad(p1, p2, p3, p4);
+        trunk.add(new Quad(p1, p2, p3, p4));
+    }
+
+    public Rect getBoundingBox() {
+        double minX = trunk.get(0).getP1().getX();
+        double maxX = minX;
+        double minY = trunk.get(0).getP1().getY();
+        double maxY = minY;
+
+        for (Quad q : trunk) {
+            minX = Math.min(minX, q.getP1().getX());
+            minX = Math.min(minX, q.getP2().getX());
+            minX = Math.min(minX, q.getP3().getX());
+            minX = Math.min(minX, q.getP4().getX());
+
+            minY = Math.min(minY, q.getP1().getY());
+            minY = Math.min(minY, q.getP2().getY());
+            minY = Math.min(minY, q.getP3().getY());
+            minY = Math.min(minY, q.getP4().getY());
+
+            maxX = Math.max(maxX, q.getP1().getX());
+            maxX = Math.max(maxX, q.getP2().getX());
+            maxX = Math.max(maxX, q.getP3().getX());
+            maxX = Math.max(maxX, q.getP4().getX());
+
+            maxY = Math.max(maxY, q.getP1().getY());
+            maxY = Math.max(maxY, q.getP2().getY());
+            maxY = Math.max(maxY, q.getP3().getY());
+            maxY = Math.max(maxY, q.getP4().getY());
+        }
+
+        Point origin = new Point(minX, minY);
+        Point size = new Point(maxX - minX, maxY - minY);
+        return new Rect(origin, size);
+    }
+
+    public ArrayList<Quad> getTrunk() {
+        return trunk;
     }
 }

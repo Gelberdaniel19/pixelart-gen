@@ -64,4 +64,12 @@ public class Quad {
 
         return new Point(xMid, yMid);
     }
+
+    public Quad translate(Point p) {
+        Point t1 = new Point(p1.getX() + p.getX(), p1.getY() + p.getY());
+        Point t2 = new Point(p2.getX() + p.getX(), p2.getY() + p.getY());
+        Point t3 = new Point(p3.getX() + p.getX(), p3.getY() + p.getY());
+        Point t4 = new Point(p4.getX() + p.getX(), p4.getY() + p.getY());
+        return new Quad(t1, t2, t3, t4);
+    }
 }

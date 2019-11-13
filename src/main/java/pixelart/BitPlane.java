@@ -10,23 +10,26 @@ import java.util.ArrayList;
 public class BitPlane {
     private int width;
     private int height;
-    private ArrayList<Bit> plane;
+    private Bit[][] plane;
 
     public BitPlane(int width, int height) {
         this.width = width;
         this.height = height;
 
-        plane = new ArrayList<Bit>();
+        plane = new Bit[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                plane.add(new Bit(i, j));
+                plane[i][j] = new Bit(i, j);
             }
         }
     }
 
     //region Getters and Setters
     public Bit get(int x, int y) {
-        return plane.get(x * width + y);
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return null;
+        }
+        return plane[x][y];
     }
 
     public Bit get(Bit bit) {
@@ -34,13 +37,12 @@ public class BitPlane {
     }
 
     public Bit set(int x, int y, boolean on) {
-        int index = x * width + y;
-        if (index < 0 || index > plane.size()) {
+        if (x < 0 || x >= plane.length || y < 0 || y > plane[0].length) {
             return null;
         }
 
-        plane.get(index).on = on;
-        return plane.get(index);
+        plane[x][y].on = on;
+        return plane[x][y];
     }
 
     public Bit set(Bit bit, boolean on) {
@@ -59,7 +61,7 @@ public class BitPlane {
         return height;
     }
 
-    public ArrayList<Bit> getBits() {
+    public Bit[][] getBits() {
         return plane;
     }
     //endregion
@@ -78,7 +80,6 @@ public class BitPlane {
         set(bit, true);
 
         // Recursive case
-        System.out.println("pixelart.Bit: " + bit.x + ", " + bit.y);
         if (!get(bit.up()).on)      fill(bit.up());
         if (!get(bit.down()).on)    fill(bit.down());
         if (!get(bit.left()).on)    fill(bit.left());
