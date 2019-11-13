@@ -72,4 +72,36 @@ public class Quad {
         Point t4 = new Point(p4.getX() + p.getX(), p4.getY() + p.getY());
         return new Quad(t1, t2, t3, t4);
     }
+
+    public double getMaxX() {
+        double max = p1.getX();
+        if (p2.getX() > max) max = p2.getX();
+        if (p3.getX() > max) max = p3.getX();
+        if (p4.getX() > max) max = p4.getX();
+        return max;
+    }
+
+    public double getMaxY() {
+        double max = p1.getY();
+        if (p2.getY() > max) max = p2.getY();
+        if (p3.getY() > max) max = p3.getY();
+        if (p4.getY() > max) max = p4.getY();
+        return max;
+    }
+
+    public double getMinX() {
+        double min = p1.getX();
+        if (p2.getX() < min) min = p2.getX();
+        if (p3.getX() < min) min = p3.getX();
+        if (p4.getX() < min) min = p4.getX();
+        return min;
+    }
+
+    public double getMinY() {
+        double min = p1.getY();
+        if (p2.getY() < min) min = p2.getY();
+        if (p3.getY() < min) min = p3.getY();
+        if (p4.getY() < min) min = p4.getY();
+        return min;
+    }
 }

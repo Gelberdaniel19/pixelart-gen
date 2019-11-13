@@ -75,15 +75,42 @@ public class BitPlane {
         if (get(bit).on) {
             return;
         }
+        if (bit.x < 0 || bit.x >= width || bit.y < 0 || bit.y >= height) {
+            return;
+        }
 
         // Action
         set(bit, true);
 
         // Recursive case
-        if (!get(bit.up()).on)      fill(bit.up());
-        if (!get(bit.down()).on)    fill(bit.down());
-        if (!get(bit.left()).on)    fill(bit.left());
-        if (!get(bit.right()).on)   fill(bit.right());
+        if (get(bit.up()) != null && !get(bit.up()).on)         fill(bit.up());
+        if (get(bit.down()) != null && !get(bit.down()).on)     fill(bit.down());
+        if (get(bit.left()) != null && !get(bit.left()).on)     fill(bit.left());
+        if (get(bit.right()) != null && !get(bit.right()).on)   fill(bit.right());
+    }
+
+    public void fillHoles() {
+        boolean again = true;
+        while (again) {
+            again = false;
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    Bit bit = new Bit(i, j);
+                    if (get(bit).on) continue;
+
+                    int count = 0;
+                    if (get(bit.up()) == null || get(bit.up()).on)         count++;
+                    if (get(bit.down()) == null || get(bit.down()).on)     count++;
+                    if (get(bit.left()) == null || get(bit.left()).on)     count++;
+                    if (get(bit.right()) == null || get(bit.right()).on)   count++;
+
+                    if (count >= 3) {
+                        set(bit, true);
+                        again = true;
+                    }
+                }
+            }
+        }
     }
 
     public void fill(int x, int y) {

@@ -13,6 +13,7 @@ public class Random {
 
     public static double getDouble(double min, double max) {
         if (min >= max) {
+            System.out.println("Min=" + min + ", Max=" + max);
             throw new IllegalArgumentException("max must be greater than min");
         }
 
