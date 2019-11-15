@@ -4,7 +4,7 @@
     #if($title)
         <title>$title</title>
     #else
-        <title>Restaurant</title>
+        <title>PixelTree</title>
     #end
     <!-- Themes bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -26,6 +26,7 @@
 </head>
 
 <body>
+
 <div class="wrapper">
     <!-- navbar -->
     <nav class="sidebar" id="sidebar">
@@ -59,7 +60,7 @@
     <!-- params bar -->
     <nav class="sidebar" id="paramsbar">
         <!-- header -->
-        <div class="sidebar-header" style="margin-top: 150px">
+        <div class="sidebar-header">
             <h3>Parameters</h3>
 
             <!-- reset button -->
@@ -70,6 +71,54 @@
                     Reset Parameters
                 </a>
             </li>
+            <button type="submit" class="btn btn-success mt-2 w-100" form="paramsForm">
+                <i class="fas fa-tree"></i>
+                <span class="mr-2" />
+                Generate
+            </button>
+            <hr />
+        </div>
+
+        <div id="paramsBox">
+            <script>
+                $(document).ready(function() {
+                    #foreach($param in $parameters)
+                        document.getElementById("$param.getName()-val").innerHTML = document.getElementById("$param.getName()").value;
+                    #end
+                });
+
+                function change(slider) {
+                    document.getElementById(slider.id + "-val").innerHTML = slider.value;
+                }
+            </script>
+
+            <form action="/" method="post" id="paramsForm">
+            #foreach($param in $parameters)
+                <div class="form-group">
+                    <label for="$param.getName()" style="display:flex;">
+                        $param.getPrompt()
+                        <p style="margin-left: auto" id="$param.getName()-val">$param.getDef()</p>
+                    </label>
+                    <div style="display:flex; margin-top: -15px;">
+                        <p class="slider-label" style="margin-top: -7px;">$param.getMin()</p>
+                        <input type="range"
+                               class="form-control-range"
+                               id="$param.getName()"
+                               name="$param.getName()"
+                               min="$param.getMin()"
+                               max="$param.getMax()"
+                               step="$param.getStep()"
+                               value="$param.getDef()"
+                               onchange="change(this)"
+                               oninput="change(this)"
+                               style="margin-top: -20px; margin-bottom: 5px; margin-left: 5px; margin-right: 5px;"
+                               required>
+                        <p class="slider-label" style="margin-top: -7px;">$param.getMax()</p>
+                    </div>
+
+                </div>
+            #end
+            </form>
         </div>
         <hr />
 
