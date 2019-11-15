@@ -11,7 +11,7 @@ A pixelart tree generator. Uses a series of sliders in a web interface to contro
   - [ ] Preview a batch of generations
   - [ ] Download a preview
   - [ ] Download a batch
-- [ ] Client side
+- [ ] Backend
   - [ ] BitPlane class
     - [x] Set pixel
     - [x] DrawLine
@@ -25,7 +25,7 @@ A pixelart tree generator. Uses a series of sliders in a web interface to contro
     - [x] Overlay another image
   - [ ] Tree generation
     - [ ] Trunk and branches
-      - [ ] As wires
+      - [x] As wires
       - [ ] As quads (mainly trapezoids)
       - [ ] As an outline (list of lines)
       - [ ] Get shaded areas on BitPlane
