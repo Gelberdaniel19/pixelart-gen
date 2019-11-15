@@ -1,4 +1,4 @@
-package pixelart;
+package pixelart.logic.image;
 
 public class Bit {
     public int x;

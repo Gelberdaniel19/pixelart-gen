@@ -1,11 +1,11 @@
-package pixelart.gen;
+package pixelart.logic.gen;
 
-import pixelart.Random;
-import pixelart.Weights;
-import pixelart.geometry.Line;
-import pixelart.geometry.Point;
-import pixelart.geometry.Quad;
-import pixelart.geometry.Rect;
+import pixelart.logic.random.Random;
+import pixelart.logic.random.Weights;
+import pixelart.logic.geometry.Line;
+import pixelart.logic.geometry.Point;
+import pixelart.logic.geometry.Quad;
+import pixelart.logic.geometry.Rect;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class Tree {
     private Node root;
 
     // Parameters
-    double pUpwardsPull = 0.05;      // Percent to pull the branch upwards. 1 = straight up
+    double pUpwardsPull = -0.4;      // Percent to pull the branch upwards. 1 = straight up
     double pAngleChangeMax = 0.05;   // How much the angle can vary from the previous branch
     double pBranchAngleOff = 1;   // Add this angle to a branch when created. Goes either way randomly.
     double pBranchAngleVar = 0.1;   // +- of pBranchAngleOff

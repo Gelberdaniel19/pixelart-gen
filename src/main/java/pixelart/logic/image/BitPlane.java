@@ -1,9 +1,9 @@
-package pixelart;
+package pixelart.logic.image;
 
-import pixelart.geometry.Line;
-import pixelart.geometry.Point;
-import pixelart.geometry.Quad;
-import pixelart.geometry.Triangle;
+import pixelart.logic.geometry.Line;
+import pixelart.logic.geometry.Point;
+import pixelart.logic.geometry.Quad;
+import pixelart.logic.geometry.Triangle;
 
 import java.util.ArrayList;
 

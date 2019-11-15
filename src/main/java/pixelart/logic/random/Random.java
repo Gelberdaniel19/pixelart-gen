@@ -1,4 +1,4 @@
-package pixelart;
+package pixelart.logic.random;
 
 import java.util.Map;
 

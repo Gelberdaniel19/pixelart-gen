@@ -1,4 +1,4 @@
-package pixelart.geometry;
+package pixelart.logic.geometry;
 
 import java.util.ArrayList;
 

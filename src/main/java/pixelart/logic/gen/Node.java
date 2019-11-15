@@ -1,6 +1,6 @@
-package pixelart.gen;
+package pixelart.logic.gen;
 
-import pixelart.geometry.Point;
+import pixelart.logic.geometry.Point;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package pixelart.geometry;
+package pixelart.logic.geometry;
 
 public class Rect {
     private Point origin;
