@@ -24,4 +24,20 @@ public class Point {
     public void setY(double y) {
         this.y = y;
     }
+
+    public static Point add(Point p, Point q) {
+        return new Point(p.getX() + q.getX(), p.getY() + q.getY());
+    }
+
+    public static Point addX(Point p, double x) {
+        return new Point(p.getX() + x, p.getY());
+    }
+
+    public static Point addY(Point p, double y) {
+        return new Point(p.getX(), p.getY() + y);
+    }
+
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }

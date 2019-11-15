@@ -15,31 +15,6 @@ public class Line {
         return (n < a && n > b) || (n < b && n > a);
     }
 
-    public static Point intersects(Line line1, Line line2) {
-        double a1 = line1.getEnd().getY() - line1.getStart().getY();
-        double b1 = line1.getStart().getX() - line1.getEnd().getX();
-        double c1 = a1 * line1.getStart().getX() + b1 * line1.getStart().getY();
-
-        double a2 = line2.getEnd().getY() - line2.getStart().getY();
-        double b2 = line2.getStart().getX() - line2.getEnd().getX();
-        double c2 = a2 * line2.getStart().getX() + b2 * line2.getStart().getY();
-
-        double det = a1 * b2 - a2 * b1;
-        if (det == 0) {
-            return null;
-        } else {
-            double x = (b2 * c1 - b1 * c2) / det;
-            double y = (a1 * c2 - a2 * c1) / det;
-            Point intersect = new Point(x, y);
-            if (isBetween(x, line1.getStart().getX(), line1.getEnd().getX())
-                    && isBetween(y, line1.getStart().getY(), line1.getEnd().getY())) {
-                return intersect;
-            } else {
-                return null;
-            }
-        }
-    }
-
     //region Getters and Setters
     public Point getStart() {
         return start;
@@ -113,6 +88,18 @@ public class Line {
         if (angle < 0) {
             angle = Math.PI + angle;
         }
+        return angle;
+    }
+
+    public double getAngle() {
+        double dx = end.getX() - start.getX();
+        double dy = end.getY() - start.getY();
+
+        double angle = Math.atan(dy / dx);
+        if (dx < 0) {
+            angle += Math.PI;
+        }
+
         return angle;
     }
 }

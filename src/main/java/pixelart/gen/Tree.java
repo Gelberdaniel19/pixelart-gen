@@ -11,71 +11,116 @@ import java.util.ArrayList;
 
 public class Tree {
     private ArrayList<Quad> trunk;
-    private int iterations = 0;
+    private Node root;
 
-    // Trunk parameters
-    double paramBaseWidth = 15;         // How wide the base of the tree is
-    double paramLengthVar = 0.01;          // How much +/- the length of a segment varies is from its base length
-    double paramAngleDelta = 0.3;       // How much the angle varies on average from the normal of its base (for left branch)
-    double paramNarrow = 0.1;           // How much the segment narrows on average
-    double paramNarrowVar = 0.05;       // How much +/- the segment is forcibly narrowed
-    double repeatDivisor = 2.5;           // Higher number makes smaller segments
-    double minSegmentLen = 4;
-    double branchChance = 0.1;
+    // Parameters
+    double pUpwardsPull = 0.05;      // Percent to pull the branch upwards. 1 = straight up
+    double pAngleChangeMax = 0.05;   // How much the angle can vary from the previous branch
+    double pBranchAngleOff = 1;   // Add this angle to a branch when created. Goes either way randomly.
+    double pBranchAngleVar = 0.1;   // +- of pBranchAngleOff
+    int pMinDepth = 10;           // At least this many nodes must be present from the root
+    int pMaxDepth = 30;          // If the tree gets this many nodes deep, stop
+    int pBranchDepthStart = 3;   // Minimum depth before a branch can occur
+    double pBranchChance = 0.4;     // Chance for a node to spawn a branch
+    int pBranchMaxNodes = 2;     // Max nodes in a branch
+    double pTerminateChanceBase = 0.0;  // Chance for the node to be the final node on the branch
+    double pTerminateChanceMult = 0.05; // How much more terminate chance per later
+    int pTerminateChanceOff = 10;    // What depth the terminate chance starts increasing
+    double pAvgNodeLength = 5;      // Average length between nodes
+    double pVarNodeLength = 2;      // Length between nodes = pAvgNodeLength + [-pVarNodeLength, pVarNodeLength]
 
     public Tree() {
         trunk = new ArrayList<Quad>();
     }
 
-    public void startGeneration() {
-        generate(new Point(-paramBaseWidth / 2, 0), new Point(paramBaseWidth / 2, 0));
+    public void generate() {
+        // Generate tree wire
+        root = new Node(new Point(0, 0));
+        growNode(root, 0, false, pMaxDepth);
     }
 
-    private void generate(Point base1, Point base2) {
-        iterations++;
-        if (iterations > 30) {
+    private void growNode(Node localRoot, int depth, boolean isStartBranch, int nodesLeft) {
+        // Chance to terminate the branch randomly
+        if (depth >= pMinDepth) {
+            double termChance = pTerminateChanceBase;
+            if (depth > pTerminateChanceOff) {
+                termChance += pTerminateChanceMult * (depth - pTerminateChanceOff);
+            }
+            Weights<Boolean> terminal = new Weights<Boolean>()
+                    .add(true, termChance)
+                    .add(false, 1 - termChance);
+            if ((Boolean) Random.choice(terminal)) {
+                System.out.println("Branch ended.");
+                return;
+            }
+        }
+
+        // Terminate if nodes left is zero
+        if (nodesLeft == 0) {
             return;
         }
 
-        // Get base line
-        Line base = new Line(base1, base2);
-        double baseLen = base.getLength();
-
-        // Get angle of segment
-        double deltaAngle = Random.getDouble(-paramAngleDelta, paramAngleDelta);
-        double angle = base.getNormal() + deltaAngle;
-
-        // Set left and right angles to narrow by the narrow angle
-        double narrowAngle = Random.getDouble(paramNarrow - paramNarrowVar, paramNarrow + paramNarrowVar);
-        double leftAngleNarrow = Random.getDouble(0, narrowAngle);
-        double rightAngleNarrow = narrowAngle - leftAngleNarrow;
-
-        // Get left and right angles
-        double leftAngle = angle - leftAngleNarrow;
-        double rightAngle = angle + rightAngleNarrow;
-
-        // Get length of the left and right sides
-        double leftLength = Random.getDouble((baseLen/repeatDivisor) - paramLengthVar, (baseLen/repeatDivisor) + paramLengthVar);
-        double rightLength = Random.getDouble((baseLen/repeatDivisor) - paramLengthVar, (baseLen/repeatDivisor) + paramLengthVar);
-        leftLength = Math.max(leftLength, minSegmentLen);
-        rightLength = Math.max(rightLength, minSegmentLen);
-
-        // Get the points of the left and right sides
-        double dxL = leftLength * Math.cos(leftAngle);
-        double dyL = leftLength * Math.sin(leftAngle);
-        double dxR = rightLength * Math.cos(rightAngle);
-        double dyR = rightLength * Math.sin(rightAngle);
-        Point left = new Point(base1.getX() + dxL, base1.getY() + dyL);
-        Point right = new Point(base2.getX() + dxR, base2.getY() + dyR);
-
-        if (baseLen < 3) {
-            return;
+        // Get angle from local root node
+        double prevAngle;
+        if (localRoot.getParent() == null) {
+            prevAngle = Math.PI / 2;
+        } else {
+            Line line = new Line(localRoot.getParent().getData(), localRoot.getData());
+            prevAngle = line.getAngle();
         }
 
-        // Add quad
-        Quad quad = new Quad(base1, base2, right, left);
-        trunk.add(quad);
-        generate(left, right);
+        // Get angle before being pulled up
+        double deltaAngle = Random.getDouble(-pAngleChangeMax, pAngleChangeMax);
+        double angle = prevAngle + deltaAngle;
+
+        // Pull angle up
+        angle -= Math.PI / 2;
+        angle *= (1 - pUpwardsPull);
+        angle += Math.PI / 2;
+
+        // Apply branch offset if applicable
+        if (isStartBranch) {
+            double angleOff = Random.getDouble(pBranchAngleOff - pBranchAngleVar, pBranchAngleOff + pBranchAngleVar);
+            if (Random.getInt(0, 1) == 0) {
+                angle -= angleOff;
+            } else {
+                angle += angleOff;
+            }
+        }
+
+        // Get node length
+        double length = Random.getDouble(pAvgNodeLength - pVarNodeLength, pAvgNodeLength + pVarNodeLength);
+        double dx = length * Math.cos(angle);
+        double dy = length * Math.sin(angle);
+        Point newPoint = new Point(localRoot.getData().getX() + dx, localRoot.getData().getY() + dy);
+        System.out.println("Point: " + newPoint);
+        Node next = new Node(newPoint);
+        next.setParent(localRoot);
+        growNode(next, depth + 1, false, nodesLeft - 1);
+
+        if (depth >= pBranchDepthStart) {
+            Weights<Boolean> weights = new Weights<Boolean>()
+                    .add(true, pBranchChance)
+                    .add(false, 1 - pBranchChance);
+            if ((Boolean) Random.choice(weights)) {
+                growNode(next, depth + 1, true, Math.min(nodesLeft - 1, pBranchMaxNodes));
+            }
+        }
+    }
+
+    public ArrayList<Line> getLines() {
+        return getLines(root);
+    }
+
+    private ArrayList<Line> getLines(Node root) {
+        ArrayList<Line> lines = new ArrayList<Line>();
+
+        for (Node node : root.getChildren()) {
+            lines.add(new Line(root.getData(), node.getData()));
+            lines.addAll(getLines(node));
+        }
+
+        return lines;
     }
 
     public Rect getBoundingBox() {
