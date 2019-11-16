@@ -25,31 +25,31 @@ public class Parameter {
         params.add(new Parameter("upwards-pull", "Upwards pull",
                 0.05, -1.6, 1.6, 0.05));
         params.add(new Parameter("max-angle", "Max angle change",
-                0.01, 0, 3.15, 0.05));
+                0.01, 0, 3.15, 0.07));
         params.add(new Parameter("branch-angle-off", "Avg branch angle change",
-                0.01, 0, 3.15, 0.2));
+                0.01, 0, 3.15, 0.78));
         params.add(new Parameter("branch-angle-var", "Branch angle variance",
-                0.01, 0, 3.15, 0.1));
+                0.01, 0, 3.15, 0.15));
         params.add(new Parameter("min-depth", "Minimum depth",
-                1, 2, 100, 7));
+                1, 2, 100, 10));
         params.add(new Parameter("max-depth", "Maximum depth",
-                1, 2, 100, 20));
-        params.add(new Parameter("branch-depth-start", "Minimum depth for branches",
-                1, 1, 100, 4));
+                1, 2, 100, 40));
         params.add(new Parameter("branch-chance", "Branch chance",
-                0.01, 0, 1, 0.3));
+                0.01, 0, 1, 0.06));
+        params.add(new Parameter("branch-depth-start", "Minimum branch depth",
+                1, 1, 100, 3));
         params.add(new Parameter("branch-max-nodes", "Maximum branch depth",
-                1, 1, 100, 2));
+                1, 1, 100, 6));
         params.add(new Parameter("term-chance-base", "Base chance to stop at node",
                 0.01, 0, 1, 0));
         params.add(new Parameter("term-chance-mult", "Terminate height factor",
-                0.0025, 0, 1, 0));
+                0.0025, 0, 1, 0.01));
         params.add(new Parameter("term-chance-off", "Where terminate height factor starts",
-                1, 0, 100, 7));
+                1, 0, 100, 20));
         params.add(new Parameter("avg-node-len", "Average length between nodes",
-                0.1, 0.1, 100, 5));
+                0.1, 0.1, 100, 2.8));
         params.add(new Parameter("var-node-len", "Variance in length between nodes",
-                0.1, 0, 100, 2));
+                0.1, 0, 100, 1.2));
 
         return params;
     }

@@ -65,7 +65,7 @@
 
             <!-- reset button -->
             <li style="display: flex;">
-                <a href="/reset" class="ml-1">
+                <a href="/" class="ml-1">
                     <i class="fas fa-undo"></i>
                     <span class="mr-2" />
                     Reset Parameters
@@ -92,7 +92,23 @@
                 }
             </script>
 
-            <form action="/" method="post" id="paramsForm">
+            <script>
+                $(function () {
+                    $('#paramsForm').on('submit', function (e) {
+                        $.ajax({
+                            type: 'post',
+                            url: '/generate',
+                            data: $('#paramsForm').serialize(),
+                            success: function () {
+                                $('#image').attr('src', '/image?' + new Date().getTime());
+                            }
+                        });
+                        e.preventDefault();
+                    });
+                });
+            </script>
+
+            <form id="paramsForm">
             #foreach($param in $parameters)
                 <div class="form-group">
                     <label for="$param.getName()" style="display:flex;">
@@ -124,6 +140,13 @@
 
         <!-- params themselves -->
     </nav>
+
+    <!-- image -->
+    <div id="output-window">
+        <img id="image" src="/image">
+    </div>
+
 </div>
+
 </body>
 </html>

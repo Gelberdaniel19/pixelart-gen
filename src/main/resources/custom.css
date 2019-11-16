@@ -37,6 +37,23 @@ body {
     padding: 20px;
 }
 
+#output-window {
+    margin-left: 600px;
+    width: 100%;
+    height: 100vh;
+    background: #5a5255;
+    padding: 50px;
+    text-align: center;
+}
+
+#image {
+    width: 50%;
+    margin: auto;
+    image-rendering: crisp-edges;
+    border-radius: 10px;
+    border: 2px solid #ae5a41;
+}
+
 .sidebar h5 {
     margin: auto;
     font-weight: bolder;

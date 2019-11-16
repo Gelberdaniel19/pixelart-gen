@@ -10,8 +10,8 @@ import pixelart.logic.geometry.Rect;
 import java.util.ArrayList;
 
 public class Tree {
-    private ArrayList<Quad> trunk;
     private Node root;
+    private ArrayList<Line> normals;
 
     // Parameters
     double pUpwardsPull = -0.4;      // Percent to pull the branch upwards. 1 = straight up
@@ -30,7 +30,6 @@ public class Tree {
     double pVarNodeLength = 2;      // Length between nodes = pAvgNodeLength + [-pVarNodeLength, pVarNodeLength]
 
     public Tree() {
-        trunk = new ArrayList<Quad>();
     }
 
     public void generate() {
@@ -50,7 +49,6 @@ public class Tree {
                     .add(true, termChance)
                     .add(false, 1 - termChance);
             if ((Boolean) Random.choice(terminal)) {
-                System.out.println("Branch ended.");
                 return;
             }
         }
@@ -68,6 +66,13 @@ public class Tree {
             Line line = new Line(localRoot.getParent().getData(), localRoot.getData());
             prevAngle = line.getAngle();
         }
+
+        // Get normal line
+        double NORMAL_LEN = 6;
+        double normal = prevAngle + Math.PI / 4;
+        double normdx = NORMAL_LEN * Math.cos(normal);
+        double normdy = NORMAL_LEN * Math.sin(normal);
+        normals.add(new Line(new Point(normdx, normdy), new Point(-normdx, -normdy)));
 
         // Get angle before being pulled up
         double deltaAngle = Random.getDouble(-pAngleChangeMax, pAngleChangeMax);
@@ -93,7 +98,6 @@ public class Tree {
         double dx = length * Math.cos(angle);
         double dy = length * Math.sin(angle);
         Point newPoint = new Point(localRoot.getData().getX() + dx, localRoot.getData().getY() + dy);
-        System.out.println("Point: " + newPoint);
         Node next = new Node(newPoint);
         next.setParent(localRoot);
         growNode(next, depth + 1, false, nodesLeft - 1);
@@ -123,25 +127,125 @@ public class Tree {
         return lines;
     }
 
-    public Rect getBoundingBox() {
-        double minX = trunk.get(0).getP1().getX();
-        double maxX = minX;
-        double minY = trunk.get(0).getP1().getY();
-        double maxY = minY;
-
-        for (Quad q : trunk) {
-            if (q.getMinX() < minX)     minX = q.getMinX();
-            if (q.getMinY() < minY)     minY = q.getMinY();
-            if (q.getMaxX() > maxX)     maxX = q.getMaxX();
-            if (q.getMaxY() > maxY)     maxY = q.getMaxY();
-        }
-
-        Point origin = new Point(minX - 5, minY);
-        Point size = new Point(maxX - minX + 10, maxY - minY + 5);
-        return new Rect(origin, size);
+    //region Getters and Setters
+    public Node getRoot() {
+        return root;
     }
 
-    public ArrayList<Quad> getTrunk() {
-        return trunk;
+    public void setRoot(Node root) {
+        this.root = root;
     }
+
+    public double getpUpwardsPull() {
+        return pUpwardsPull;
+    }
+
+    public void setpUpwardsPull(double pUpwardsPull) {
+        this.pUpwardsPull = pUpwardsPull;
+    }
+
+    public double getpAngleChangeMax() {
+        return pAngleChangeMax;
+    }
+
+    public void setpAngleChangeMax(double pAngleChangeMax) {
+        this.pAngleChangeMax = pAngleChangeMax;
+    }
+
+    public double getpBranchAngleOff() {
+        return pBranchAngleOff;
+    }
+
+    public void setpBranchAngleOff(double pBranchAngleOff) {
+        this.pBranchAngleOff = pBranchAngleOff;
+    }
+
+    public double getpBranchAngleVar() {
+        return pBranchAngleVar;
+    }
+
+    public void setpBranchAngleVar(double pBranchAngleVar) {
+        this.pBranchAngleVar = pBranchAngleVar;
+    }
+
+    public int getpMinDepth() {
+        return pMinDepth;
+    }
+
+    public void setpMinDepth(int pMinDepth) {
+        this.pMinDepth = pMinDepth;
+    }
+
+    public int getpMaxDepth() {
+        return pMaxDepth;
+    }
+
+    public void setpMaxDepth(int pMaxDepth) {
+        this.pMaxDepth = pMaxDepth;
+    }
+
+    public int getpBranchDepthStart() {
+        return pBranchDepthStart;
+    }
+
+    public void setpBranchDepthStart(int pBranchDepthStart) {
+        this.pBranchDepthStart = pBranchDepthStart;
+    }
+
+    public double getpBranchChance() {
+        return pBranchChance;
+    }
+
+    public void setpBranchChance(double pBranchChance) {
+        this.pBranchChance = pBranchChance;
+    }
+
+    public int getpBranchMaxNodes() {
+        return pBranchMaxNodes;
+    }
+
+    public void setpBranchMaxNodes(int pBranchMaxNodes) {
+        this.pBranchMaxNodes = pBranchMaxNodes;
+    }
+
+    public double getpTerminateChanceBase() {
+        return pTerminateChanceBase;
+    }
+
+    public void setpTerminateChanceBase(double pTerminateChanceBase) {
+        this.pTerminateChanceBase = pTerminateChanceBase;
+    }
+
+    public double getpTerminateChanceMult() {
+        return pTerminateChanceMult;
+    }
+
+    public void setpTerminateChanceMult(double pTerminateChanceMult) {
+        this.pTerminateChanceMult = pTerminateChanceMult;
+    }
+
+    public int getpTerminateChanceOff() {
+        return pTerminateChanceOff;
+    }
+
+    public void setpTerminateChanceOff(int pTerminateChanceOff) {
+        this.pTerminateChanceOff = pTerminateChanceOff;
+    }
+
+    public double getpAvgNodeLength() {
+        return pAvgNodeLength;
+    }
+
+    public void setpAvgNodeLength(double pAvgNodeLength) {
+        this.pAvgNodeLength = pAvgNodeLength;
+    }
+
+    public double getpVarNodeLength() {
+        return pVarNodeLength;
+    }
+
+    public void setpVarNodeLength(double pVarNodeLength) {
+        this.pVarNodeLength = pVarNodeLength;
+    }
+    //endregion
 }
